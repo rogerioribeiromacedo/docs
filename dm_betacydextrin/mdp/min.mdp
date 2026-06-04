@@ -1,0 +1,38 @@
+; Preprocessing
+define                 = -DFLEXIBLE		; use flexible water instead of rigid water in the topology (useful for normal mode analysis)
+
+; Run Control
+integrator             = steep			; steepest descent energy minimization algorithm
+nsteps                 = 100000  		; maximum number of minimization steps
+
+; Energy minimization
+emstep                 = 0.01			; Initial step size
+
+; Bonds
+constraint-algorithm   = lincs
+constraints            = h-bonds		; constrain bonds involving hydrogen atoms
+
+; Output Control
+nstenergy              = 500 			; save energies every 500 steps (.edr)
+nstlog                 = 500 			; 500 steps * 1fs = 500 fs = update log file every 0.5 ps
+nstxout                = 0 				; do not write coordinates to .trr
+nstvout                = 0 				; do not write velocities to .trr
+nstfout				   = 0 				; do not write forces to .trr
+nstxout-compressed     = 250			; write compressed coordinates every 250 steps
+
+; Neighbor searching - parameters describing how to find the neighbors of each atom and how to calculate the interactions
+nstlist			       = 10				; update neighbor list every 10 steps
+cutoff-scheme          = Verlet
+rlist	               = 1.0	    	; cutoff distance for the neighbor list
+pbc                    = xyz 	   		; apply periodic boundary conditions in all directions
+
+; Electrostatic
+coulombtype		       = PME			; Treatment of long range electrostatic interactions
+rcoulomb		       = 1.2			; short-range electrostatic cutoff
+
+; Van der Waals
+vdwtype                = cutoff
+vdw-modifier           = force-switch
+rvdw-switch     	   = 1.0			; distance at which force-switching begins
+rvdw				   = 1.2	   		; short-range Van der Waals cutoff
+DispCorr        	   = EnerPres		; apply long-range dispersion correction to energy and pressure
